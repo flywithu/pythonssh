@@ -25,8 +25,8 @@ jobs:
           echo "DOCKER_USERNAME: $DOCKER_USERNAME"
           echo "DOCKER_PASSWORD: $DOCKER_PASSWORD"
         env:
-          DOCKER_USERNAME:  ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD:  ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USERNAME:  ${{ dockerhub.secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD:  ${{ dockerhub.secrets.DOCKER_PASSWORD }}
 
         
       - name: Log in to Docker Hub
