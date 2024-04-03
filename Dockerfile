@@ -30,7 +30,6 @@ RUN set -eux; \
 		gnupg \
 		tar \
 		xz \
-		\
 		bluez-dev \
 		bzip2-dev \
 		dpkg-dev dpkg \
@@ -56,6 +55,7 @@ RUN set -eux; \
 		xz-dev \
 		zlib-dev \
   		exiftool \
+    		openssh \ 
 	; \
 	\
 	wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz"; \
@@ -157,4 +157,10 @@ RUN set -eux; \
 	\
 	pip --version
 
-CMD ["python3"]
+RUN sed 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' -i /etc/ssh/sshd_config \
+&& echo 'root:P@ssw0rd' | chpasswd \
+&& ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa \
+&& ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa \
+&& mkdir -p /var/run/sshd
+EXPOSE 22
+CMD ["/usr/sbin/sshd","-D"]
