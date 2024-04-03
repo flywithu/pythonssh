@@ -56,6 +56,8 @@ RUN set -eux; \
 		zlib-dev \
   		exiftool \
     		openssh \ 
+      		shadow \
+		sudo \
 	; \
 	\
 	wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz"; \
@@ -156,11 +158,13 @@ RUN set -eux; \
 	rm -f get-pip.py; \
 	\
 	pip --version
+RUN mkdir /var/run/sshd
+RUN useradd -m -d /home/ubuntu -s /bin/ash -u 1000 ubuntu && \
+    echo "ubuntu:ubuntu" | chpasswd && \
+    adduser ubuntu sudo
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+RUN echo "ubuntu ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/ubuntu
 
-RUN sed 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' -i /etc/ssh/sshd_config \
-&& echo 'root:P@ssw0rd' | chpasswd \
-&& ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa \
-&& ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N '' -t dsa \
-&& mkdir -p /var/run/sshd
 EXPOSE 22
 CMD ["/usr/sbin/sshd","-D"]
