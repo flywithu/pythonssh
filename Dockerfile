@@ -20,6 +20,12 @@ RUN useradd -m -d /home/ubuntu -s /bin/ash -u 1000 ubuntu && \
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
+RUN echo 'HostKey /etc/ssh/keys/ssh_host_rsa_key' >> /etc/ssh/sshd_config && \
+    echo 'HostKey /etc/ssh/keys/ssh_host_dsa_key' >> /etc/ssh/sshd_config && \
+    echo 'HostKey /etc/ssh/keys/ssh_host_ecdsa_key' >> /etc/ssh/sshd_config && \
+    echo 'HostKey /etc/ssh/keys/ssh_host_ed25519_key' >> /etc/ssh/sshd_config
+
+
 EXPOSE 22
 
 CMD ["/usr/sbin/sshd", "-D"]
