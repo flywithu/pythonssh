@@ -6,10 +6,9 @@
 
 FROM python:3.9.19-alpine3.19
 
-RUN apk add --no-cache openssh shadow sudo bash
+RUN apk add --no-cache openssh shadow sudo bash exiftool
 RUN mkdir /var/run/sshd
 RUN mkdir -p /mnt/hdd0 && mkdir -p /mnt/mypool
-RUN ssh-keygen -A
 
 RUN echo '%wheel ALL=(ALL) ALL' > /etc/sudoers.d/wheel
 RUN echo '%wheel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers.d/wheel
