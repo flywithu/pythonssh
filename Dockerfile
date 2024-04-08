@@ -6,7 +6,7 @@
 
 FROM python:3.9.19-alpine3.19
 
-RUN apk add --no-cache openssh shadow sudo bash exiftool
+RUN apk add --no-cache openssh shadow sudo bash exiftool go
 RUN mkdir /var/run/sshd
 RUN mkdir -p /mnt/hdd0 && mkdir -p /mnt/mypool
 
